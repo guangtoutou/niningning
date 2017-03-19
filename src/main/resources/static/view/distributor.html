@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Distributors</title>
+<link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css"
+	rel="stylesheet">
+<link href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css"
+	rel="stylesheet">
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+<script src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+	<div>
+		<br />
+	</div>
+	<form class="form-horizontal" action="/distributor.json">
+		<div class="form-group">
+			<label for="distName" class="col-sm-2 control-label">经销商名称</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" name="distName"
+					placeholder="经销商名称">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="soldTo" class="col-sm-2 control-label">SoldTo</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" name="soldTo"
+					placeholder="SoldTo">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="address" class="col-sm-2 control-label">地址</label>
+			<div class="col-sm-4">
+				<input type="text" class="form-control" name="address"
+					placeholder="地址">
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-4">
+				<button type="submit" class="btn btn-primary">提交</button>
+			</div>
+		</div>
+	</form>
+	<div style="height: 200px"></div>
+	<div class="container">
+		<table id="distTable" class="display" cellspacing="0" width="100%">
+			<thead>
+				<tr>
+					<th>id</th>
+					<th>经销商名称</th>
+					<th>SoldTo</th>
+					<th>地址</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	<script>
+		$(document).ready(function() {
+			fetchDistributors();
+		});
+
+		function fetchDistributors() {
+			$.getJSON('/distributor.json', function(json) {
+				$("#distTable").DataTable({
+					data : json,
+					columns : [ {
+						"data" : "id"
+					}, {
+						"data" : "name"
+					}, {
+						"data" : "soldTo"
+					}, {
+						"data" : "address"
+					} ]
+				});
+			});
+		}
+
+		function add() {
+			$.ajax({
+				method : "POST",
+				url : "/distributor.json",
+				data : {
+					distName : "John",
+					soldTo : "Boston",
+					address : "钦州南路8弄21号"
+				}
+			}).done(function(msg) {
+				alert("Data Saved: " + msg);
+				fetchDistributors();
+			});
+		}
+	</script>
+
+</body>
+</html>
